@@ -45,6 +45,6 @@ export class LoginService {
     clearTimeout(this.tiempo)
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
-    this.router.navigate(["login"]);
+    this.router.navigate(["/login"]);
   }
 }

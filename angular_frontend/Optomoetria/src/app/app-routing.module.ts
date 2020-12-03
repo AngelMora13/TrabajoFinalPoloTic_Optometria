@@ -13,22 +13,27 @@ import { SecretariaComponent } from './componentes/secretaria/secretaria/secreta
 import { TallerComponent } from './componentes/taller/taller/taller.component';
 import { PedidoComponent } from './componentes/ventas/pedido/pedido.component';
 import { VentasComponent } from './componentes/ventas/ventas/ventas.component';
+import { GerenciaGuard } from './guardianes/gerencia.guard';
+import { MedicoGuard } from './guardianes/medico.guard';
+import { SecretariaGuard } from './guardianes/secretaria.guard';
+import { TallerGuard } from './guardianes/taller.guard';
+import { VentasGuard } from './guardianes/ventas.guard';
 
 const routes: Routes = [
   {path:"",component:LoginComponent},
   {path:"login",component:LoginComponent},
-  {path:"turnos",component:SecretariaComponent},
-  {path:"turnos/:id",component:ModificarTurnoComponent},
-  {path:"agregar/turno",component:AgregarTurnoComponent},
-  {path:"pacientes/agregar",component:PacienteComponent},
-  {path:"pacientes",component:MedicoComponent},
-  {path:"paciente/:id",component:HistoriaComponent},
-  {path:"paciente/:id/historia",component:VerHistoriasComponent},
-  {path:"ventas",component:VentasComponent},
-  {path:"ventas/pedidos",component:PedidoComponent},
-  {path:"taller",component:TallerComponent},
-  {path:"gerencia",component:GerenciaComponent},
-  {path:"gerencia/reportes",component:ReportesComponent}
+  {path:"turnos",component:SecretariaComponent,canActivate:[SecretariaGuard]},
+  {path:"turnos/:id",component:ModificarTurnoComponent,canActivate:[SecretariaGuard]},
+  {path:"agregar/turno",component:AgregarTurnoComponent,canActivate:[SecretariaGuard]},
+  {path:"pacientes/agregar",component:PacienteComponent,canActivate:[SecretariaGuard]},
+  {path:"pacientes",component:MedicoComponent,canActivate:[MedicoGuard]},
+  {path:"paciente/:id",component:HistoriaComponent,canActivate:[MedicoGuard]},
+  {path:"paciente/:id/historia",component:VerHistoriasComponent,canActivate:[MedicoGuard]},
+  {path:"ventas",component:VentasComponent,canActivate:[VentasGuard]},
+  {path:"ventas/pedidos",component:PedidoComponent,canActivate:[VentasGuard]},
+  {path:"taller",component:TallerComponent,canActivate:[TallerGuard]},
+  {path:"gerencia",component:GerenciaComponent,canActivate:[GerenciaGuard]},
+  {path:"gerencia/reportes",component:ReportesComponent,canActivate:[GerenciaGuard]}
 ];
 
 @NgModule({
