@@ -20,6 +20,7 @@ export class AgregarTurnoComponent implements OnInit {
   tiempo:any=0;
   dni:number=0;
   personalAsignado:string;
+  hoy = new Date
   
   @ViewChild("mensaje") mensaje:ElementRef;
   @ViewChild("turnoForm") turnoForm:NgForm;
@@ -77,33 +78,34 @@ export class AgregarTurnoComponent implements OnInit {
         }
     }
 }
-
-  ngOnInit(): void {
-
+  getAll(){
+    
     //turnos-----------
     this.usuario
     .Turnos()
-    .then((res) => {
-      this.turnos=Object.values(res)
+    .then((res:Turnos[]) => {
+      this.turnos=res.filter(e=>e.fecha.split("-")[2]===this.hoy.getDate().toString())
     })
     .catch((error) => this.login.singout());
     //personal medico------
     this.usuario
     .PersonalMedico()
-    .then((res) => {
-      this.personalMedico=Object.values(res);
+    .then((res:Personal[]) => {
+      this.personalMedico=res;
     })
     .catch((error) => this.login.singout());
     //pacientes----------
     this.usuario
     .Pacientes()
-    .then((res) => {
-      this.pacientes=Object.values(res);
+    .then((res:Paciente[]) => {
+      this.pacientes=res;
       
     })
     .catch((error) => this.login.singout());
 
-    //otro----------------
+  }
+  ngOnInit(): void {
+    this.getAll()
     setTimeout(() => {
       if(!this.turnos[0]){
         this.turno=1
@@ -111,10 +113,11 @@ export class AgregarTurnoComponent implements OnInit {
         for(let turno of this.turnos){
         if(turno.turno>this.turno){
           this.turno=turno.turno
+          this.turno+=1
         }
       }
       };
-      this.turno+=1;
+      ;
     }, 500);
     
   }

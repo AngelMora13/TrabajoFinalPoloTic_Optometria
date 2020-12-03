@@ -44,18 +44,23 @@ export class ReportesComponent implements OnInit {
     this.seleccion = this.listado.nativeElement.value;
     switch (this.seleccion) {
       case '1':
+        this.filtro=[]
         this.filtro = this.turnos.filter((e) => e.asistencia);
         this.asistenciaFiltro = this.filtro;
         break;
       case '2':
+        this.filtro=[]
         this.filtro = this.turnos.filter((e) => !e.asistencia);
+        console.log(this.filtro)
         this.asistenciaFiltro = this.filtro;
+        break
       case '3':
         this.filtro=[]
         this.pedidos.forEach(e=>{
           this.filtro.push(this.getTurno(e.paciente))
         })
         this.asistenciaFiltro=this.filtro
+        break
       case '4':  
       this.filtroPedidos=[] 
       this.productos.forEach(e=>{
@@ -521,7 +526,6 @@ export class ReportesComponent implements OnInit {
       .Turnos()
       .then((res: Turnos[]) => {
         this.turnos = res;
-        this.filtro = res;
       })
       .catch((error) => this.login.singout());
 

@@ -23,7 +23,7 @@ export class SecretariaComponent implements OnInit {
   modificarTurno:number;
   tiempo:any=0
   isData:boolean=false
-  hoy = new Date
+  hoy = new Date()
   @ViewChild("mensaje") mensaje:ElementRef;
 
   //constructor-----------------------------
@@ -37,7 +37,7 @@ export class SecretariaComponent implements OnInit {
         this.usuario
         .Turnos()
         .then((res:Turnos[]) => {
-          this.turnos=res.filter(e=>e.fecha.split("-")[2]===this.hoy.getDate().toString())
+          this.turnos=res.filter(e=>parseInt(e.fecha.split("-")[2])===this.hoy.getDate())
         })
         .catch((error) => this.login.singout());
       

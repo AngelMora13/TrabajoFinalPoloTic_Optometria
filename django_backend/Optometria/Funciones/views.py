@@ -56,7 +56,6 @@ def turnosAdd(request):
         elif request.method=="POST":
             if user.cargo=="SECRETARIA":
                 turnoNuevo=JSONParser().parse(request)
-                print(turnoNuevo)
                 try:
                     turno=Turnos.objects.get(id=turnoNuevo["id"])
                     turno_serializer=turnosSerializer(turno,data=turnoNuevo)
