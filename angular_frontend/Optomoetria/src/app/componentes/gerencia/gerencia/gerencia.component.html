@@ -1,0 +1,353 @@
+<header class="py-2 bg-dark text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h1>Gerencia</h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div *ngIf="isData">
+  <section id="taller" class="bg-light py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-9">
+          <form>
+            <div class="form-group">
+              <label for="id" class="col"
+                >Seleccione los datos a visualizar</label
+              >
+              <div class="row">
+                <select #listado class="custom-select" (change)="seleccionListado()">
+                  <option value="0" selected>Seleccion</option>
+                  <option value="1">Listado de Pacientes</option>
+                  <option value="2">Listado de Historias de Pacientes</option>
+                  <option value="3">Listado de Turnos</option>
+                  <option value="4">Listado de Productos</option>
+                  <option value="5">Listado de Ventas</option>
+                  <option value="6">Listado de Personal</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Lista de Pacientes-->
+
+  <section
+    *ngIf="seleccion === '1'"
+    id="ListadoPacientes"
+    class="bg-light"
+  >
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+              <h2 class="card-title">Lista de Pacientes</h2>
+            </header>
+            <div class="card-body">
+              <table class="table table-responsive-lg">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Id</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Telefono</th>
+                    <th>fecha</th>
+                  </tr>
+                  <tr *ngFor="let item of pacientes">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.dni }}</td>
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.apellido }}</td>
+                    <td>{{ item.telefono }}</td>
+                    <td>{{ item.fecha }}</td>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Lista de Historias-->
+
+  <section
+    *ngIf="seleccion === '2'"
+    id="ListadoHistorias"
+    class="bg-light"
+  >
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+              <h2 class="card-title">Lista de Historias</h2>
+            </header>
+            <div class="card-body">
+              <table class="table table-responsive-lg">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Id</th>
+                    <th>DNI del Paciente</th>
+                    <th>Nombre del Paciente</th>
+                    <th>Observaciones</th>
+                    <th>fecha</th>
+                  </tr>
+                  <tr *ngFor="let item of historias">
+                    <td>{{ item.id }}</td>
+                    <td>{{ getPaciente(item.paciente).dni }}</td>
+                    <td>
+                      {{ getPaciente(item.paciente).nombre }}
+                      {{ getPaciente(item.paciente).apellido }}
+                    </td>
+                    <td>{{ item.historialMedico }}</td>
+                    <td>{{ item.fecha }}</td>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Lista de Turnos-->
+
+  <section *ngIf="seleccion === '3'" id="ListaTurnos" class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+              <div class="row">
+                <h2 class="col card-title">Turnos</h2>
+                <div class="col-lg-1"></div>
+                <div class="col align-self-end">
+                  <label class="col-form-label mr-4">Filtrar:</label>
+                  <input
+                    type="button"
+                    value="Dia"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(1)"
+                  />
+                  <input
+                    type="button"
+                    value="Mes"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(2)"
+                  />
+                  <input
+                    type="button"
+                    value="año"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(3)"
+                  />
+
+                  <div class="form-group ml-5 mt-2 mb-0">
+                    <div *ngIf="dia">
+                      <input type="date" #inputDia class="form-control-sm" />
+                    </div>
+                    <div *ngIf="mes">
+                      <input type="month" #inputMes class="form-control-sm" />
+                    </div>
+                    <div *ngIf="anio">
+                      <input
+                        type="number"
+                        #inputAnio
+                        placeholder="Ej.: 2020"
+                        class="form-control-sm"
+                      />
+                    </div>
+                    <div class="form-group mt-2">
+                      <button
+                        *ngIf="dia || mes || anio"
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        (click)="onFiltro()"
+                      >
+                        Filtrar
+                      </button>
+                      <button
+                        *ngIf="quitarFiltro"
+                        type="button"
+                        class="btn btn-secondary btn-sm ml-2"
+                        (click)="onQuitarFiltro()"
+                      >
+                        Quitar Filtro
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </header>
+            <div class="card-body">
+              <table class="table table-responsive-lg">
+                <thead class="thead-dark">
+                  <tr class="">
+                    <th>Id</th>
+                    <th>DNI del Paciente</th>
+                    <th>Nombre</th>
+                    <th>Medico Asignado</th>
+                    <th>Asistencia</th>
+                    <th>Numero de Turno</th>
+                    <th>fecha</th>
+                  </tr>
+                  <tr *ngFor="let item of filtro">
+                    <td>{{ item.id }}</td>
+                    <td>{{ getPaciente(item.paciente).dni }}</td>
+                    <td>
+                      {{ getPaciente(item.paciente).nombre }}
+                      {{ getPaciente(item.paciente).apellido }}
+                    </td>
+                    <td>{{ getPersonal(item.personalAsignado).nombre }} {{ getPersonal(item.personalAsignado).apellido }}</td>
+                    <td>{{ item.asistencia}}</td>
+                    <td>{{ item.turno }}</td>
+                    <td>{{item.fecha}}</td>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Lista de Productos-->
+
+  <section *ngIf="seleccion === '4'" id="productos" class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+              <div class="row">
+              <h2 class="card-title">
+                Productos
+              </h2>
+            </div>
+            </header>
+            <div class="card-body">
+              <table class="table table-responsive-lg">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Clasificacion</th>
+                    <th>Alcance</th>
+                    <th>Lado</th>
+                    <th>Armazon</th>
+                    <th>Precio</th>
+                  </tr>
+                  <tr *ngFor="let item of productos">
+                    <td>{{item.id}}</td>
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.clasificacion}}</td>                        
+                    <td *ngIf="item.clasificacion==='LENTE'">{{item.alcance}}</td>
+                    <td *ngIf="item.clasificacion==='LENTE'">{{item.lado}}</td>
+                    <td *ngIf="item.clasificacion==='LENTE'">{{item.armazon}}</td>      
+                    <td *ngIf="item.clasificacion!='LENTE'">No Aplica</td>     
+                    <td *ngIf="item.clasificacion!='LENTE'">No Aplica</td>       
+                    <td *ngIf="item.clasificacion!='LENTE'">No Aplica</td>                       
+                    <td>{{item.precio}}</td>
+                  </tr>
+                </thead>
+              </table>      
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Lista de Ventas-->
+
+  <section *ngIf="seleccion === '5'" id="pedidos" class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+              <h2 class="card-title">
+                Pedidos
+              </h2>
+            </header>
+            <div class="card-body">
+              <table class="table table-responsive-lg">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Id</th>
+                    <th>Productos (Cantidad)</th>
+                    <th>DNI del Paciente</th>
+                    <th>Nombre del Paciente</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                  </tr>
+                  <tr *ngFor="let item of filtroPedidos, let i=index">
+                    <td>{{item.id}}</td>
+                    <td><ul class="list-inline" *ngFor="let productos of listadoProductos[i]" >
+                        <li class="list-group-item">Nombre: {{getProducto(productos.id).nombre}} ({{productos.cantidad}})</li>
+                        <li class="list-group-item">Clasificacion: {{getProducto(productos.id).clasificacion}}</li>
+                        <li class="list-group-item">Alcance: {{getProducto(productos.id).alcance}}</li>
+                        <li class="list-group-item">Lado: {{getProducto(productos.id).lado}}</li>
+                        <li class="list-group-item">Armazon: {{getProducto(productos.id).armazon}}</li>
+                        
+                    </ul></td>
+                    <td>{{getPaciente(item.paciente).dni}}</td>
+                    <td>{{getPaciente(item.paciente).nombre}} {{getPaciente(item.paciente).apellido}}</td>
+                    <td>{{item.estado}}</td>
+                    <td>{{item.fecha}}</td>
+                  </tr>
+                </thead>
+              </table>      
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Lista de Personal-->
+
+  <section
+    *ngIf="seleccion === '6'"
+    id="Personal"
+    class="bg-light"
+  >
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+              <h2 class="card-title">Lista de Personal</h2>
+            </header>
+            <div class="card-body">
+              <table class="table table-responsive-lg">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Id</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Cargo</th>
+                  </tr>
+                  <tr *ngFor="let item of personal">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.dni }}</td>
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.apellido }}</td>
+                    <td>{{ item.cargo }}</td>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

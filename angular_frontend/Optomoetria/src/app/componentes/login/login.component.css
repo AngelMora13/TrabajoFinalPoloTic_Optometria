@@ -1,0 +1,25 @@
+.container{
+
+    margin-top: 50px;
+}
+
+@media only screen and (max-width:1140px){
+    h1,h2{
+        font-size: 1.3rem
+    }
+}
+@media only screen and (max-width:770px){
+    h1,h2{
+        font-size: 1rem
+    }
+}
+
+
+@media only screen and (max-width:540px){
+    .sideLogin{
+        display: none;
+    }
+    .container{
+        margin: 0;
+    }
+}

@@ -1,0 +1,279 @@
+<header class="py-2 bg-dark text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Gerencia</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div *ngIf="isData">
+    <section id="taller" class="bg-light py-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-9">
+            <form>
+              <div class="form-group">
+                <label for="id" class="col"
+                  >Seleccione los datos a visualizar</label
+                >
+                <div class="row">
+                  <select #listado class="custom-select" (change)="seleccionListado()">
+                    <option value="0" selected>Seleccion</option>
+                    <option value="1">Pacientes que asistieron a los turnos</option>
+                    <option value="2">Pacientes que no asistieron a los turnos</option>
+                    <option value="3">Pacientes que han realizado pedidos</option>
+                    <option value="4">Productos más vendidos</option>
+                    <option value="5">Ventas totales</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--turnos asistencias true y false-->
+
+  <section *ngIf="seleccion === '1' || seleccion==='2'" id="ListaTurnos" class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+              <div class="row">
+                <h2 class="col card-title">Turnos</h2>
+                <div class="col-lg-1"></div>
+                <div class="col align-self-end">
+                  <label class="col-form-label mr-4">Filtrar:</label>
+                  <input
+                    type="button"
+                    value="Semana"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(1)"
+                  />
+                  <input
+                    type="button"
+                    value="Mes"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(2)"
+                  />                  
+                  <div class="form-group ml-5 mt-2 mb-0">
+                    <div *ngIf="dia">
+                      <input type="date" #inputDia class="form-control-sm" />
+                    </div>
+                    <div *ngIf="mes">
+                      <input type="month" #inputMes class="form-control-sm" />
+                    </div>                    
+                    <div class="form-group mt-2">
+                      <button
+                        *ngIf="dia || mes"
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        (click)="onFiltro()"
+                      >
+                        Filtrar
+                      </button>
+                      <button
+                        *ngIf="quitarFiltro"
+                        type="button"
+                        class="btn btn-secondary btn-sm ml-2"
+                        (click)="onQuitarFiltro()"
+                      >
+                        Quitar Filtro
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </header>
+            <div class="card-body">
+              <table class="table table-responsive-lg">
+                <thead class="thead-dark">
+                  <tr class="">
+                    <th>Id</th>
+                    <th>DNI del Paciente</th>
+                    <th>Nombre</th>
+                    <th>Medico Asignado</th>
+                    <th>Asistencia</th>
+                    <th>Numero de Turno</th>
+                    <th>fecha</th>
+                  </tr>
+                  <tr *ngFor="let item of filtro">
+                    <td>{{ item.id }}</td>
+                    <td>{{ getPaciente(item.paciente).dni }}</td>
+                    <td>
+                      {{ getPaciente(item.paciente).nombre }}
+                      {{ getPaciente(item.paciente).apellido }}
+                    </td>
+                    <td>{{ getPersonal(item.personalAsignado).nombre }} {{ getPersonal(item.personalAsignado).apellido }}</td>
+                    <td>{{ item.asistencia}}</td>
+                    <td>{{ item.turno }}</td>
+                    <td>{{item.fecha}}</td>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--pedidos-->
+  
+  <section *ngIf="seleccion === '3'" id="ListaPedidos" class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+              <div class="row">
+                <h2 class="col card-title">Pedidos</h2>
+                <div class="col-lg-1"></div>
+                <div class="col align-self-end">
+                  <label class="col-form-label mr-4">Filtrar:</label>
+                  <input
+                    type="button"
+                    value="Semana"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(1)"
+                  />
+                  <input
+                    type="button"
+                    value="Mes"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(2)"
+                  />                  
+                  <div class="form-group ml-5 mt-2 mb-0">
+                    <div *ngIf="dia">
+                      <input type="date" #inputDia class="form-control-sm" />
+                    </div>
+                    <div *ngIf="mes">
+                      <input type="month" #inputMes class="form-control-sm" />
+                    </div>                    
+                    <div class="form-group mt-2">
+                      <button
+                        *ngIf="dia || mes"
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        (click)="onFiltro()"
+                      >
+                        Filtrar
+                      </button>
+                      <button
+                        *ngIf="quitarFiltro"
+                        type="button"
+                        class="btn btn-secondary btn-sm ml-2"
+                        (click)="onQuitarFiltro()"
+                      >
+                        Quitar Filtro
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </header>
+            <div class="card-body">
+              <table class="table table-responsive-lg">
+                <thead class="thead-dark">
+                  <tr class="">
+                    <th>Id</th>
+                    <th>DNI del Paciente</th>
+                    <th>Nombre</th>
+                    <th>Medico Asignado</th>
+                    <th>fecha</th>
+                  </tr>
+                  <tr *ngFor="let item of filtro">
+                    <td>{{ item.id }}</td>
+                    <td>{{ getPaciente(item.paciente).dni }}</td>
+                    <td>
+                      {{ getPaciente(item.paciente).nombre }}
+                      {{ getPaciente(item.paciente).apellido }}
+                    </td>
+                    <td>{{ getPersonal(item.personalAsignado).nombre }} {{ getPersonal(item.personalAsignado).apellido }}</td>
+                    <td>{{item.fecha}}</td>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Productos mas vendidos-->
+  <section *ngIf="seleccion === '4'" id="ventas" class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+                <div class="row">
+                  <h2 class="col card-title">Productos mas Vendidos en el Mes</h2>
+                    </div>
+              </header>
+            <div class="card-body">
+                <table class="table table-responsive-lg">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Clasificacion</th>
+                        <th>Alcance</th>
+                        <th>Lado</th>
+                        <th>Armazon</th>
+                        <th>Cantidad Vendida</th>
+                      </tr>
+                      <tr *ngFor="let item of filtroPedidos, let i=index">
+                        <td>{{item.id}}</td>
+                        <td>{{item.nombre}}</td>
+                        <td>{{item.clasificacion}}</td>
+                        <td>{{item.alcance}}</td>
+                        <td>{{item.lado}}</td>
+                        <td>{{item.armazon}}</td>
+                        <td>{{item.cantidad}}</td>
+                    </tr>
+                    </thead>
+                  </table>      
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <!--Ventas por Vendedores-->
+  <section *ngIf="seleccion === '5'" id="ventas" class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+                <div class="row">
+                  <h2 class="col card-title">Ventas del Mes</h2>
+                    </div>
+              </header>
+            <div class="card-body">
+                <table class="table table-responsive-lg">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>Id</th>
+                        <th>Nombre del Vendedor</th>
+                        <th>Ventas Realizadas</th>
+                      </tr>
+                      <tr *ngFor="let vendedor of vendedores, let i=index">
+                        <td>{{vendedor.id}}</td>
+                        <td>{{vendedor.nombre}} {{vendedor.apellido}}</td>
+                        <td>{{getVentas(vendedor.id)}}</td>
+                    </tr>
+                    </thead>
+                  </table>      
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,90 @@
+<header class="py-2 bg-dark text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Ventas</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  
+  <div *ngIf="isData">
+    <section id="ventas" class="bg-light py-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-9">
+            <form>
+              <div class="form-group">
+                <label for="id" class="col">Ingrese el ID del Pedido</label>
+                <div class="row">
+                  <input
+                    id="id"
+                    type="number"
+                    placeholder="ID Pedido"
+                    name="id"
+                    class="col form-control w-50"
+                    [(ngModel)]="id"
+                  />
+                  <input
+                    type="submit"
+                    class="col btn btn-primary btn-sm ml-3"
+                    value="Buscar"
+                    (click)="onBuscar()"
+                  />
+                </div>
+              </div>
+            </form>
+  
+            <div *ngIf="busqueda">
+              <div class="row py-3">
+                <div class="col p-2 text-center rounded alert-danger">
+                  El Pedido no existe o ya fue entregado
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pedidos" class="bg-light">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <header class="card-header">
+                  <h2 class="card-title">
+                    Pedidos
+                  </h2>
+                </header>
+                <div class="card-body">
+                  <table class="table table-responsive-lg">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>Id</th>
+                        <th>Productos</th>
+                        <th>DNI del Paciente</th>
+                        <th>Nombre del Paciente</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Modificar</th>
+                      </tr>
+                      <tr *ngFor="let item of filtroPedidos, let i=index">
+                        <td>{{item.id}}</td>
+                        <td><p *ngFor="let productos of listadoProductos[i]" >{{getProducto(productos.id).nombre}}: {{productos.cantidad}}</p></td>
+                        <td>{{getPaciente(item.paciente).dni}}</td>
+                        <td>{{getPaciente(item.paciente).nombre}} {{getPaciente(item.paciente).apellido}}</td>
+                        <td>{{item.estado}}</td>
+                        <td>{{item.fecha}}</td>
+                        <td><button type="button" class="btn btn-sm btn-primary" (click)="onModificar(item)">Modificar Estado</button></td>
+                      </tr>
+                    </thead>
+                  </table>      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+  </div>

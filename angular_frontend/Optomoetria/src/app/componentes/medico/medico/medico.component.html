@@ -1,0 +1,180 @@
+<header class="py-2 bg-dark text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h1>Profesional Medico</h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div *ngIf="isData">
+  <section id="medico" class="bg-light py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-9">
+          <form>
+            <div class="form-group">
+              <label for="dni" class="col">Ingrese el DNI del Paciente</label>
+              <div class="row">
+                <input
+                  id="dni"
+                  type="number"
+                  placeholder="DNI Paciente"
+                  name="dni"
+                  class="col form-control w-50"
+                  [(ngModel)]="dni"
+                  required
+                />
+                <input
+                  type="submit"
+                  class="col btn btn-primary btn-sm ml-3"
+                  value="Buscar"
+                  (click)="onBuscar()"
+                />
+              </div>
+            </div>
+          </form>
+
+          <div *ngIf="busqueda">
+            <div class="row py-3">
+              <div class="col p-2 text-center rounded alert-danger">
+                Paciente no asignado
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="sinAsistencia">
+            <div class="row py-3">
+              <div class="col p-2 text-center rounded alert-danger">
+                El Paciente aun no asiste a ningun turno
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="sinHistoria">
+            <div class="row py-3">
+              <div class="col p-2 text-center rounded alert-danger">
+                El Paciente no presenta historial medico
+              </div>
+              <a routerLink="/paciente/{{ paciente_id }}" class="col btn btn-secondary ml-3"
+                >Agregar Historia medica</a
+              >
+            </div>
+          </div>
+
+          <div *ngIf="observaciones">
+            <div class="row py-3">
+              <div class="col p-2 text-center rounded alert-danger">
+                El Paciente presenta Observaciones en su historial medico
+              </div>
+            </div>
+            <div class="row py-3">
+              <a routerLink="/paciente/{{ paciente_id }}" class="col btn btn-secondary ml-3"
+                >Agregar Historia medica</a
+              >
+              <a routerLink="/paciente/{{ paciente_id }}/historia" class="col btn btn-light ml-3" (click)="onVerHistoria()"
+                >Ver Historia medica</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pacientes" class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <header class="card-header">
+              <div class="row">
+                <h2 class="col card-title">Pacientes</h2>
+                <div class="col-lg-1"></div>
+                <div class="col align-self-end">
+                  <label class="col-form-label mr-4">Filtrar:</label>
+                  <input
+                    type="button"
+                    value="Dia"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(1)"
+                  />
+                  <input
+                    type="button"
+                    value="Mes"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(2)"
+                  />
+                  <input
+                    type="button"
+                    value="año"
+                    class="rounded-circle btn btn-sm btn-dark m-1"
+                    (click)="onFecha(3)"
+                  />
+
+                  <div class="form-group ml-5 mt-2 mb-0">
+                    <div *ngIf="dia">
+                      <input type="date" #inputDia class="form-control-sm" />
+                    </div>
+                    <div *ngIf="mes">
+                      <input type="month" #inputMes class="form-control-sm" />
+                    </div>
+                    <div *ngIf="anio">
+                      <input
+                        type="number"
+                        #inputAnio
+                        placeholder="Ej.: 2020"
+                        class="form-control-sm"
+                      />
+                    </div>
+                    <div class="form-group mt-2">
+                      <button
+                        *ngIf="dia || mes || anio"
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        (click)="onFiltro()"
+                      >
+                        Filtrar
+                      </button>
+                      <button
+                        *ngIf="quitarFiltro"
+                        type="button"
+                        class="btn btn-secondary btn-sm ml-2"
+                        (click)="onQuitarFiltro()"
+                      >
+                        Quitar Filtro
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </header>
+            <div class="card-body">
+              <table class="table table-responsive-lg">
+                <thead class="thead-dark">
+                  <tr class="">
+                    <th>DNI del Paciente</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Asistencia</th>
+                    <th>fecha</th>
+                  </tr>
+
+                  <tr *ngFor="let item of filtro">
+                    <td>{{ getPaciente(item.paciente).dni }}</td>
+                    <td>{{ getPaciente(item.paciente).nombre }}</td>
+                    <td>{{ getPaciente(item.paciente).apellido }}</td>
+                    <td>{{ item.asistencia }}</td>
+                    <td>{{ item.fecha }}</td>
+                  </tr>
+                  <tr></tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

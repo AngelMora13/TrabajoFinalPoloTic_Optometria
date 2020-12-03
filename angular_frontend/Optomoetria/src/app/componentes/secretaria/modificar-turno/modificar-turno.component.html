@@ -1,0 +1,80 @@
+<header class="py-2 bg-dark text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h2>Modificar Turno</h2>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div *ngIf="isData">
+  <section id="turnoADD" class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col">
+          <div class="row py-3">
+            <div class="col p-2 text-center rounded" #mensaje></div>
+          </div>
+          <div class="card bg-light">
+          <header class="card-header">
+            <h2 class="card-title">Modificar</h2>
+          </header>
+          <div class="card-body">
+            <form #turnoForm="ngForm" (submit)="onModificarTurno(turnoForm)">
+              <div class="form-group">
+                <label for="dni">DNI del Paciente</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="dni"
+                  name="paciente"
+                  [(ngModel)]="getPaciente(turnos.paciente).dni"
+                  [disabled]="true"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Medico Asignado</label>
+                <select
+                  class="form-control"
+                  id="select"
+                  name="personalAsignado"
+                  [(ngModel)]="personalAsignado"
+                  required
+                >
+                  <option
+                    class="custom-select"
+                    *ngFor="let medico of personalMedico"
+                    value="{{ medico.id }}"
+                  >
+                    {{ medico.nombre }} {{ medico.apellido }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Numero de Turno</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="turno"
+                  id="turno"
+                  [(ngModel)]="turno"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [hidden]="turno === 0"
+                value="guardar"
+              >
+                Guardar Turno
+              </button>
+            </form>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>

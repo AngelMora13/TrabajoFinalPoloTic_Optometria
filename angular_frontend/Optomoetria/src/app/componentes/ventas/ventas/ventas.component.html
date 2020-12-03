@@ -1,0 +1,191 @@
+<header class="py-2 bg-dark text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Ventas</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div *ngIf="isData">
+    <section id="ventas" class="bg-light py-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-9">
+            <form>
+              <div class="form-group">
+                <label for="dni" class="col">Ingrese el DNI del Paciente</label>
+                <div class="row">
+                  <input
+                    id="dni"
+                    type="number"
+                    placeholder="DNI Paciente"
+                    name="dni"
+                    class="col form-control w-50"
+                    [(ngModel)]="dni"
+                    [disabled]="realizarVenta"
+                    required
+                  />
+                  <input
+                    type="submit"
+                    class="col btn btn-primary btn-sm ml-3"
+                    value="Buscar"
+                    (click)="onBuscar()"
+                    [hidden]="realizarVenta"
+                  />
+                  <input 
+                  type="submit"
+                  class="col btn btn-danger btn-sm ml-3"
+                  value="Eliminar Pedido"
+                  [hidden]="!realizarVenta"
+                  (click)="realizarVenta=false; cantidadProducto=[]; costoTotal=0"
+                  />
+                </div>
+              </div>
+            </form>
+  
+            <div *ngIf="busqueda">
+              <div class="row py-3">
+                <div class="col p-2 text-center rounded alert-danger">
+                  La persona no se encuentra en la lista de pacientes
+                </div>
+              </div>
+            </div>
+  
+            <div *ngIf="pedido">
+              <div class="row py-3">
+                <div class="col p-2 text-center rounded alert-success">
+                  el Paciente puede realizar pedido
+                </div>
+              </div>
+              <div class="row py-3">
+                <a class="col btn btn-secondary ml-3" (click)="onPedido()"
+                  >iniciar venta</a
+                >                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div *ngIf="realizarVenta">
+      <div class="row">
+
+        <!--Seccion de venta de Productos-->
+      <section id="productos" class="col bg-light">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <header class="card-header">
+                  <div class="row">
+                  <h2 class="card-title">
+                    Productos
+                  </h2>
+                  <div class="col-lg align-self-lg-baseline"></div>
+                  <button type="button" class="btn btn-secondary btn-sm" (click)="onAgregarId()">Agregar por Id</button>
+                </div>
+                </header>
+                <div class="card-body">
+                  <table class="table table-responsive-lg">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Clasificacion</th>
+                        <th>Alcance</th>
+                        <th>Lado</th>
+                        <th>Armazon</th>
+                        <th>Precio</th>
+                        <th>Agregar</th>
+                      </tr>
+                      <tr *ngFor="let item of productos">
+                        <td>{{item.id}}</td>
+                        <td>{{item.nombre}}</td>
+                        <td>{{item.clasificacion}}</td>                        
+                        <td *ngIf="item.clasificacion==='LENTE'">{{item.alcance}}</td>
+                        <td *ngIf="item.clasificacion==='LENTE'">{{item.lado}}</td>
+                        <td *ngIf="item.clasificacion==='LENTE'">{{item.armazon}}</td>      
+                        <td *ngIf="item.clasificacion!='LENTE'">No Aplica</td>     
+                        <td *ngIf="item.clasificacion!='LENTE'">No Aplica</td>       
+                        <td *ngIf="item.clasificacion!='LENTE'">No Aplica</td>                       
+                        <td>{{item.precio}}</td>
+                        <td><button type="button" class="btn btn-primary btn-sm" (click)="onAgregarProducto(item)">Agregar</button></td>
+                      </tr>
+                    </thead>
+                  </table>      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!--Seccion de productos al paciente-->
+      <section id="pacienteProductos" class="col bg-light">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <header class="card-header">
+                  <div class="row">
+                  <h2 class="card-title">
+                    {{getPaciente(dni).dni}}, {{getPaciente(dni).nombre}} {{getPaciente(dni).apellido}}
+                  </h2>
+                  <div class="col-lg align-self-lg-baseline"></div>
+                  <button type="button" class="btn btn-secondary btn-sm" (click)="onEliminarId()">Eliminar Producto</button>
+                </div>
+                </header>
+                <div class="card-body">
+                  <table class="table table-responsive-lg">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Clasificacion</th>
+                        <th>Cantidad</th>
+                        <th>precio</th>
+                        <th>Total</th>
+                      </tr>
+                      <tr *ngFor="let item of cantidadProducto">
+                        <td>{{item.id}}</td>
+                        <td>{{getProducto(item.id).nombre}}</td>
+                        <td>{{getProducto(item.id).clasificacion}}</td>
+                        <td>{{item.cantidad}}</td>
+                        <td>{{getProducto(item.id).precio}}</td>
+                        <td>{{item.cantidad*getProducto(item.id).precio}}</td>
+                      </tr>                      
+                    </thead>
+                  </table> 
+                  <table class="table table-responsive-lg">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>Total de Productos</th>
+                        <th>Costo Total</th>
+                        <th>Tipo de Pago</th>
+                        <th>-</th>  
+                      </tr>
+                      <tr>
+                        <td>{{cantidadProducto.length}}</td>
+                        <td>{{costoTotal}}</td>
+                        <td><select #selectPago class="form-control">
+                          <option selected class="custom-select" value=0>Tipo de pago</option>
+                          <option class="custom-select" value="1">Tarjeta de Credito</option>
+                          <option class="custom-select" value="2">Tarjeta de Debito</option>
+                          <option class="custom-select" value="3">Billetera Virtual</option>
+                          <option class="custom-select" value="4">Efectivo</option>
+                        </select></td>
+                        <td><button type="button" class="btn btn-sm btn-primary" (click)="onFinalizarVenta()">Finalizar Venta</button></td>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    </div>
